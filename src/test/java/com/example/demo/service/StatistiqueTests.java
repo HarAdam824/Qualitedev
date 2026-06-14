@@ -2,23 +2,37 @@ package com.example.demo.service;
 
 import com.example.demo.data.Voiture;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.BeforeEach;
+import static org.junit.jupiter.api.Assertions.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-@SpringBootTest
 public class StatistiqueTests {
 
-    @Test
-    void testStatistique() {
-        StatistiqueImpl statistique = new StatistiqueImpl();
-        Voiture v1 = new Voiture("Ferrari", 3000);
-        Voiture v2 = new Voiture("Porsche", 3000);
-        statistique.ajouter(v1);
-        statistique.ajouter(v2);
-        Echantillon echantillon = statistique.prixMoyen();
-        assertEquals(3000, echantillon.getPrixMoyen());
-        assertEquals(2, echantillon.getNombreDeVoitures());
+    StatistiqueImpl stats;
+
+    @BeforeEach
+    void initialiser() {
+        stats = new StatistiqueImpl();
     }
 
+    @Test
+    void moyenneDuneSeuleVoiture() throws ArithmeticException {
+        stats.ajouter(new Voiture("Ford", 15000));
+        Echantillon e = stats.prixMoyen();
+        assertEquals(15000, e.getPrixMoyen());
+        assertEquals(1, e.getNombreDeVoitures());
+    }
+
+    @Test
+    void moyenneDeDeuxVoitures() throws ArithmeticException {
+        stats.ajouter(new Voiture("Seat", 8000));
+        stats.ajouter(new Voiture("Opel", 12000));
+        Echantillon e = stats.prixMoyen();
+        assertEquals(10000, e.getPrixMoyen());
+        assertEquals(2, e.getNombreDeVoitures());
+    }
+
+    @Test
+    void erreurSiAucuneVoiture() {
+        assertThrows(ArithmeticException.class, () -> stats.prixMoyen());
+    }
 }
