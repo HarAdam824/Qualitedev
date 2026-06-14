@@ -10,8 +10,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.mockito.Mockito.;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -28,7 +28,7 @@ class WebTests {
     void envoyerUneVoiture() throws Exception {
         mockMvc.perform(post("/voiture")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"marque\":\"Honda\",\"prix\":9000}"))
+                .content("{"marque":"Honda","prix":9000}"))
             .andExpect(status().isOk());
         verify(statistiqueImpl).ajouter(any());
     }
